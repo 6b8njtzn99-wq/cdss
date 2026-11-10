@@ -1,0 +1,14 @@
+obat,kondisi,keterangan,sumber
+Metformin,"LFG di bawah 30 mL/menit/1,73 m2","Kontraindikasi; dosis maks 2000 mg/hari (LFG 60-90), 1000 mg (LFG 45-60), 500 mg (LFG 30-45)",PNPK DM tipe 2 2026 hal 33
+Metformin,"gangguan hati berat; hipoksemia (penyakit serebrovaskular, sepsis, renjatan, PPOK, gagal jantung NYHA III-IV)",Perlu diperhatikan risiko asidosis laktat,PNPK DM tipe 2 2026 hal 33
+Tiazolidinedion,gagal jantung NYHA kelas III atau IV,Tidak boleh diberikan (edema dan penambahan berat badan),PNPK DM tipe 2 2026 hal 34
+Tiazolidinedion,osteoporosis atau osteopenia,Sebaiknya tidak diberikan (risiko patah tulang),PNPK DM tipe 2 2026 hal 34-35
+Pioglitazon,kanker kandung kemih aktif atau riwayatnya,Peringatan FDA 2011,PNPK DM tipe 2 2026 hal 34-35
+Sulfonilurea,gangguan fungsi ginjal (PGK stadium 3) atau penyakit hati kronik,Perlu penyesuaian dosis; risiko hipoglikemia,PNPK DM tipe 2 2026 hal 36
+Glinid,LFG di bawah 30 mL/menit,Obat dihentikan,PNPK DM tipe 2 2026 hal 37
+Inhibitor alfa glukosidase,"LFG di bawah 30 mL/menit/1,73 m2; gangguan hati berat; irritable bowel syndrome",Dihentikan atau tidak diberikan,PNPK DM tipe 2 2026 hal 37
+Inhibitor SGLT-2,LFG di bawah 45 mL/menit,Tidak diperkenankan; risiko ketoasidosis,PNPK DM tipe 2 2026 hal 39
+Agonis reseptor GLP-1,riwayat atau riwayat keluarga MEN tipe 2 atau kanker tiroid medular,Kontraindikasi,PNPK DM tipe 2 2026 hal 48-49
+Agonis reseptor GLP-1,gastroparesis,Dihindari,PNPK DM tipe 2 2026 hal 48
+Agonis reseptor GLP-1,"LFG di bawah 30 mL/menit/1,73 m2",Pemakaian dibatasi,PNPK DM tipe 2 2026 hal 48
+Statin,kehamilan,Kontraindikasi,PNPK DM tipe 2 2026 hal 66

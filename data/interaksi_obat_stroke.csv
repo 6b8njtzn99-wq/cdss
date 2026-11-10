@@ -1,0 +1,11 @@
+obat_a,obat_b,tingkat,keterangan,sumber
+Aspirin,Alteplase,TUNDA_24_JAM,Pada pasien yang mendapat trombolisis aspirin ditunda sampai 24 jam setelah terapi,PNPK Stroke 2026 hal 49
+Aspirin,Tenecteplase,TUNDA_24_JAM,Pada pasien yang mendapat trombolisis aspirin ditunda sampai 24 jam setelah terapi,PNPK Stroke 2026 hal 49
+Antikoagulan,Alteplase,TIDAK_DIREKOMENDASIKAN,Antikoagulan dalam 24 jam setelah trombolisis tidak direkomendasikan,PNPK Stroke 2026 hal 50
+Antikoagulan,Tenecteplase,TIDAK_DIREKOMENDASIKAN,Antikoagulan dalam 24 jam setelah trombolisis tidak direkomendasikan,PNPK Stroke 2026 hal 50
+Aspirin,Clopidogrel,BATASI_DURASI,Kombinasi hanya 21-90 hari setelah stroke ringan atau TIA; tidak untuk jangka panjang,PNPK Stroke 2026 hal 31; 49
+Antiplatelet IV penghambat GP IIb/IIIa,Aspirin,TIDAK_DIREKOMENDASIKAN,Antiplatelet intravena penghambat reseptor GP IIb/IIIa tidak dianjurkan,PNPK Stroke 2026 hal 50
+Antiplatelet,Antikoagulan,TIDAK_ADA_MANFAAT,Penambahan antiplatelet pada antikoagulan (stroke iskemik; AF; sindroma koroner) belum terbukti bermanfaat,PNPK Stroke 2026 hal 50
+Nimodipin,CCB lain,TIDAK_DIANJURKAN,CCB lain tidak menunjukkan manfaat pada pencegahan vasospasme PSA,PNPK Stroke 2026 hal 71
+Warfarin,Perdarahan intraserebral,REVERSAL,Hentikan antikoagulan; INR 2 atau lebih beri 4F-PCC + FFP + vitamin K IV,PNPK Stroke 2026 hal 62
+Heparin / LMWH,Protamin sulfat,REVERSAL,Reversal perdarahan intraserebral dengan protamin 10-50 mg IV,PNPK Stroke 2026 hal 63

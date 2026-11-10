@@ -1,0 +1,25 @@
+obat,kondisi,keterangan,sumber
+Captopril,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Enalapril,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Lisinopril,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Perindopril,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Ramipril,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Imidapril,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Candesartan,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Irbesartan,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Losartan,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Olmesartan,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Telmisartan,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Valsartan,hamil,ACEi dan ARB tidak direkomendasikan diberikan selama kehamilan,PNPK Hipertensi Dewasa 2026 hal 52; 54
+Spironolakton,hiperkalemia,Kontraindikasi pada hiperkalemia dan hiponatremia,PNPK Hipertensi Dewasa 2026 hal 63
+Spironolakton,penyakit ginjal kronik berat,Kontraindikasi pada insufisiensi renal berat (eGFR di bawah 30),PNPK Hipertensi Dewasa 2026 hal 63
+Diltiazem SR,gagal jantung dengan fraksi ejeksi menurun / disfungsi ventrikel kiri,Jangan menggunakan CCB non-dihidropiridin (verapamil atau diltiazem),PNPK Hipertensi Dewasa 2026 hal 43; 71
+Diltiazem CD,gagal jantung dengan fraksi ejeksi menurun / disfungsi ventrikel kiri,Jangan menggunakan CCB non-dihidropiridin (verapamil atau diltiazem),PNPK Hipertensi Dewasa 2026 hal 43; 71
+Verapamil SR,gagal jantung dengan fraksi ejeksi menurun / disfungsi ventrikel kiri,Jangan menggunakan CCB non-dihidropiridin (verapamil atau diltiazem),PNPK Hipertensi Dewasa 2026 hal 43; 71
+Diltiazem IV,bradikardi; gagal jantung,Kontraindikasi (obat hipertensi emergensi),PNPK Hipertensi 2026 hal 51
+Metoprolol IV,AV blok derajat 2 atau 3; gagal jantung sistolik; asma; bradikardi,Kontraindikasi (obat hipertensi emergensi),PNPK Hipertensi 2026 hal 51
+Labetalol,AV blok derajat 2 atau 3; gagal jantung sistolik; asma; bradikardi,Kontraindikasi (obat hipertensi emergensi),PNPK Hipertensi 2026 hal 51
+Nikardipin IV,kegagalan fungsi hati,Kontraindikasi (obat hipertensi emergensi),PNPK Hipertensi 2026 hal 50
+Nitroprusid,kegagalan fungsi hati atau ginjal,Kontraindikasi relatif; risiko intoksikasi sianida,PNPK Hipertensi 2026 hal 51
+CCB non-dihidropiridin (verapamil; diltiazem),disfungsi ventrikel kiri,Tidak dianjurkan pada angina pektoris,PNPK Hipertensi 2026 hal 71
+Antiplatelet; antikoagulan,krisis hipertensi,Dapat menyebabkan stroke perdarahan,PNPK Hipertensi 2026 hal 71

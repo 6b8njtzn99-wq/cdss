@@ -1,0 +1,13 @@
+obat,kondisi,keterangan,sumber
+Aspirin,fibrilasi atrium,Aspirin tidak direkomendasikan sebagai pengganti antikoagulan,PNPK Stroke 2026 hal 31
+Antikoagulan,perdarahan intrakranial primer belum disingkirkan,Antikoagulan tidak diberikan sampai pencitraan memastikan tidak ada perdarahan intrakranial primer,PNPK Stroke 2026 hal 50
+Alteplase,defisit neurologis tidak bermakna,Trombolisis tidak direkomendasikan pada defisit non-disabling,PNPK Stroke 2026 hal 35
+Alteplase,onset di atas 4.5 jam dengan CT tanpa kontras saja,Tidak direkomendasikan tanpa pencitraan lanjutan,PNPK Stroke 2026 hal 36
+Tenecteplase,defisit neurologis tidak bermakna,Trombolisis tidak direkomendasikan pada defisit non-disabling,PNPK Stroke 2026 hal 35
+Trombolisis intravena,defisit neurologis tidak bermakna (non-disabling),Tidak direkomendasikan (Kelas III; B-R),PNPK Stroke 2026 hal 35
+Trombolisis intravena,"onset di atas 4,5 jam hanya dengan CT non-kontras",Tidak direkomendasikan tanpa pencitraan lanjutan (III; B),PNPK Stroke 2026 hal 36
+Antikoagulan rutin,stroke iskemik akut,Tidak direkomendasikan untuk memperbaiki luaran atau mencegah stroke berulang dini (III; A),PNPK Stroke 2026 hal 50
+Trombektomi rutin,oklusi MCA M2 nondominan; oklusi pembuluh distal (M3; A2-A3; P2-P3),Tidak direkomendasikan (III; B),PNPK Stroke 2026 hal 40
+Obat antikejang profilaksis,perdarahan intraserebral tanpa kejang,Tidak direkomendasikan (III),PNPK Stroke 2026 hal 65
+Stocking kompresi,perdarahan intraserebral imobilisasi,Tidak bermanfaat mencegah DVT (III; A),PNPK Stroke 2026 hal 63
+rFVIIa rutin,perdarahan intraserebral,Tidak direkomendasikan secara rutin (III; B),PNPK Stroke 2026 hal 63
