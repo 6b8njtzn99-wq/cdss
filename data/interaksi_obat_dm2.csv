@@ -1,0 +1,5 @@
+obat_a,obat_b,tingkat,keterangan,sumber
+Inhibitor DPP-4,Sulfonilurea,SESUAIKAN_DOSIS,Pemberian bersama sulfonilurea atau insulin perlu penyesuaian dosis karena risiko hipoglikemia,PNPK DM tipe 2 2026 hal 38
+Inhibitor DPP-4,Insulin,SESUAIKAN_DOSIS,Pemberian bersama sulfonilurea atau insulin perlu penyesuaian dosis karena risiko hipoglikemia,PNPK DM tipe 2 2026 hal 38
+Tiazolidinedion,Penginduksi atau penghambat sitokrom P450,PERHATIAN,Dimetabolisme CYP450; hati-hati bila bersama induktor atau inhibitor CYP450,PNPK DM tipe 2 2026 hal 34
+Oral antidiabetik,Insulin prandial 2-3 kali sehari,HENTIKAN_OAD,OAD dilanjutkan bila insulin prandial hanya 1 kali; dihentikan bila 2-3 kali sehari,PNPK DM tipe 2 2026 hal 53
