@@ -16,7 +16,7 @@ Layanan Knowledge Graph, RAG, dan API ada di branch `rag-neo4j`.
 - `app.py` : tampilan Streamlit (S, O, A, P)
 - `cdss_ai.py` : pencarian data, aturan keamanan, dan pemanggilan Gemini
 - `data/relasi_stroke.csv`, `data/relasi_dm2.csv` : data PNPK per penyakit (kolom sumber dan halaman)
-- `skenario_uji.csv` dan `uji_skenario.py` : 44 skenario uji
+- `skenario_uji.csv` dan `uji_skenario.py` : 45 skenario uji
 
 ## Cara menjalankan
 
