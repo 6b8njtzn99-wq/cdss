@@ -1,0 +1,16 @@
+no,icd,kondisi_pasien,obat_saat_ini,banding_diharapkan,terapi_diharapkan,peringatan_diharapkan
+1,E11,,,,Metformin,0
+2,E11,"LFG di bawah 30 mL/menit/1,73 m2",,,Metformin,1
+3,E11,gagal jantung NYHA kelas III atau IV,,,Metformin;Tiazolidinedion,1
+4,E11,,Furosemid,,Metformin,1
+5,E11,osteoporosis atau osteopenia,,,Metformin;Tiazolidinedion,1
+6,I10,,,G47.3;I15.1;I15.0;I15.2;Q25.1,Hidroklorothiazid;Captopril;Amlodipine,0
+7,I10,hamil,,G47.3;I15.1;I15.0;I15.2;Q25.1,Hidroklorothiazid;Captopril;Amlodipine,1
+8,I10,hiperkalemia,,G47.3;I15.1;I15.0;I15.2;Q25.1,Spironolakton,1
+9,I10,,Captopril,G47.3;I15.1;I15.0;I15.2;Q25.1,Candesartan;Losartan,1
+10,I10,bradikardi,,G47.3;I15.1;I15.0;I15.2;Q25.1,Bisoprolol;Atenolol,1
+11,I64,,,Stroke iskemik;Stroke perdarahan intraserebral;Perdarahan subaraknoid;Trombosis vena serebral;Mimik stroke,Alteplase;Aspirin,0
+12,I64,,Warfarin,Stroke iskemik;Stroke perdarahan intraserebral;Perdarahan subaraknoid,Alteplase;Aspirin,1
+13,I64,fibrilasi atrium,,Stroke iskemik;Stroke perdarahan intraserebral,Aspirin;DOAC,1
+14,I64,defisit neurologis tidak bermakna,,Stroke iskemik,Alteplase,1
+15,I64,,Heparin,Stroke iskemik,Alteplase;Tenecteplase,1

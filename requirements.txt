@@ -6,3 +6,5 @@ neo4j
 psycopg2-binary
 chromadb
 pypdf
+streamlit
+requests
