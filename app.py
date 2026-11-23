@@ -15,22 +15,165 @@ import time
 import streamlit as st
 import cdss_ai  # modul AI dan data CSV
 
-st.set_page_config(page_title="Clinical Co-Pilot", page_icon="🩺", layout="wide")
+st.set_page_config(page_title="Clinical Co-Pilot", page_icon="✚", layout="wide")
 
 # Tampilan: warna teal seperti mockup, lencana huruf S/O/A/P, kode ICD berlabel
 st.markdown("""
 <style>
-.block-container {max-width: 1200px; padding-top: 1.5rem;}
-.lencana {display:inline-flex; width:28px; height:28px; border-radius:8px;
-          background:#E3F1F3; color:#0F6F7C; font-weight:700;
-          align-items:center; justify-content:center; margin-right:10px;}
-.lencana.utama {background:#0F6F7C; color:#FFFFFF;}
-.judul-bagian {font-size:1.15rem; font-weight:600; margin:0.4rem 0;}
-.kode {background:#E3F1F3; color:#0A4F59; padding:1px 7px; border-radius:6px;
-       font-size:0.85rem; font-weight:600; margin-right:6px;}
-div[data-testid="stVerticalBlockBorderWrapper"] {border-radius:12px;}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+html, body, [class*="css"], .stApp {font-family:'Plus Jakarta Sans', sans-serif;}
+.stApp {background: linear-gradient(180deg,#EAF6F7 0%,#F8FBFB 320px,#FFFFFF 100%);}
+header[data-testid="stHeader"] {background:transparent;}
+.block-container {max-width: 1240px; padding-top: 1.2rem; padding-bottom: 3rem;}
+
+/* ---- Hero ---- */
+.hero {display:flex; align-items:center; gap:18px; background: linear-gradient(120deg,#0B5560 0%,#0F6F7C 55%,#1CA3A3 100%);
+       border-radius:22px; padding:26px 32px; color:#fff; margin-bottom:18px;
+       box-shadow:0 14px 34px rgba(15,111,124,.28); position:relative; overflow:hidden;}
+.hero:after {content:""; position:absolute; right:-60px; top:-60px; width:230px; height:230px;
+             border-radius:50%; background:rgba(255,255,255,.10);}
+.hero h1 {margin:0; font-size:2rem; font-weight:800; letter-spacing:-.5px; color:#fff; padding:0;}
+.logo {width:56px; height:56px; border-radius:16px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35); display:flex; align-items:center; justify-content:center; font-size:1.7rem; font-weight:800; flex-shrink:0;}
+.hero p {margin:4px 0 0; font-size:1rem; opacity:.92;}
+.pil {display:inline-block; padding:4px 12px; border-radius:999px; font-size:.78rem;
+      font-weight:600; margin-right:8px; background:rgba(255,255,255,.18); color:#fff;
+      border:1px solid rgba(255,255,255,.28);}
+.pil.demo {background:#FFB547; color:#5A3300; border-color:#FFB547;}
+
+/* ---- Lencana SOAP + judul bagian ---- */
+.lencana {display:inline-flex; width:34px; height:34px; border-radius:11px;
+          background:#D7EEF0; color:#0F6F7C; font-weight:800;
+          align-items:center; justify-content:center; margin-right:12px;}
+.lencana.utama {background:linear-gradient(135deg,#0F6F7C,#1CA3A3); color:#FFFFFF;
+                box-shadow:0 4px 10px rgba(15,111,124,.35);}
+.judul-bagian {font-size:1.2rem; font-weight:700; margin:1.1rem 0 .5rem; color:#0B3D44;}
+.kode {background:#D7EEF0; color:#0A4F59; padding:2px 9px; border-radius:7px;
+       font-size:.82rem; font-weight:700; margin-right:7px;}
+
+/* ---- Kartu ---- */
+div[data-testid="stVerticalBlockBorderWrapper"] {border-radius:16px; border:1px solid #D5E7E9;
+    background:#FFFFFF; box-shadow:0 4px 16px rgba(15,111,124,.07); transition:all .2s ease;}
+div[data-testid="stVerticalBlockBorderWrapper"]:hover {box-shadow:0 10px 26px rgba(15,111,124,.15);
+    border-color:#9FD0D4;}
+div[data-testid="stColumn"] h3 {color:#0F6F7C; font-weight:800; font-size:1.15rem !important;
+    padding-bottom:8px; margin-bottom:10px; border-bottom:3px solid #BFE3E6;}
+
+/* ---- Input ---- */
+div[data-baseweb="select"] > div {border-radius:12px; border-color:#C5DEE1;}
+
+/* ---- Tombol ---- */
+button[kind="primary"] {background:linear-gradient(120deg,#0F6F7C,#1CA3A3); border:none;
+    border-radius:12px; font-weight:700; padding:.6rem 1.6rem;
+    box-shadow:0 6px 16px rgba(15,111,124,.32); transition:transform .15s ease;}
+button[kind="primary"]:hover {transform:translateY(-2px); box-shadow:0 10px 22px rgba(15,111,124,.4);}
+button[kind="secondary"] {border-radius:12px; border-color:#9FD0D4;}
+
+/* ---- Notifikasi ---- */
+div[data-testid="stAlert"] {border-radius:14px; border:none; box-shadow:0 2px 8px rgba(0,0,0,.05);}
+hr {border-color:#D5E7E9;}
+/* ---- Kunci warna: tampil sama di tema terang maupun gelap ---- */
+:root, .stApp {color-scheme: light !important;}
+.stApp, .stApp p, .stApp li, .stApp span, .stApp label, .stApp h2, .stApp h3, .stApp h4,
+.stApp div[data-testid="stMarkdownContainer"] {color:#12313A;}
+.stApp [data-testid="stCaptionContainer"], .stApp [data-testid="stCaptionContainer"] * {color:#3A5A62 !important;}
+.stApp label p, .stApp label {color:#0B3D44 !important; font-weight:600;}
+.stApp .hero, .stApp .hero h1, .stApp .hero p, .stApp .hero .logo, .stApp .hero * {color:#FFFFFF !important;}
+.stApp .lencana.utama {color:#FFFFFF !important;}
+.stApp .lencana {color:#0F6F7C;}
+.stApp .lencana.utama {color:#FFFFFF;}
+/* kotak teks */
+.stApp [data-testid="stTextAreaRootElement"], .stApp [data-testid="stTextAreaRootElement"] * {background:#FFFFFF !important;}
+.stApp [data-testid="stTextAreaRootElement"] {border:1.5px solid #C5DEE1 !important; border-radius:14px !important;}
+.stApp [data-testid="stTextAreaRootElement"]:focus-within {border-color:#1CA3A3 !important; box-shadow:0 0 0 3px rgba(28,163,163,.18);}
+.stApp textarea {color:#12313A !important; -webkit-text-fill-color:#12313A !important; caret-color:#0F6F7C; border:none !important;}
+.stApp textarea::placeholder {color:#7C9AA1 !important; -webkit-text-fill-color:#7C9AA1 !important; opacity:1;}
+/* dropdown */
+.stApp div[data-baseweb="select"] > div, .stApp div[data-baseweb="select"] span, .stApp div[data-baseweb="select"] input {
+    background:#FFFFFF !important; color:#12313A !important; -webkit-text-fill-color:#12313A !important;}
+.stApp div[data-baseweb="select"] > div {border:1.5px solid #C5DEE1 !important; border-radius:12px !important;}
+.stApp div[data-baseweb="select"] svg {fill:#0F6F7C !important;}
+div[data-baseweb="popover"], div[data-baseweb="popover"] * {background:#FFFFFF !important; color:#12313A !important;}
+div[data-baseweb="popover"] li:hover, div[data-baseweb="popover"] li[aria-selected="true"] {background:#E3F1F3 !important;}
+.stApp input[type="text"] {background:#FFFFFF !important; color:#12313A !important; -webkit-text-fill-color:#12313A !important;}
+/* tombol */
+.stApp button[kind="primary"], .stApp button[kind="primary"] * {color:#FFFFFF !important;}
+.stApp button[kind="secondary"], .stApp button[kind="secondary"] * {background:#FFFFFF !important; color:#0F6F7C !important;}
+/* notifikasi: warna per jenis */
+.stApp [data-testid="stAlertContainer"] {border-radius:14px; border:1px solid transparent;}
+.stApp [data-testid="stAlertContainer"] * {color:#12313A !important; background:transparent !important;}
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentSuccess"]) {background:#E3F6EA !important; border-color:#A9DDBB;}
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentError"]) {background:#FDE8E8 !important; border-color:#F2B3B3;}
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentWarning"]) {background:#FFF3D6 !important; border-color:#F2D58A;}
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentInfo"]) {background:#E3F1F7 !important; border-color:#A9D3E6;}
+.stApp div[data-testid="stColumn"] h3 {color:#0F6F7C !important;}
+.stApp hr {border-color:#D5E7E9;}
+.stApp div[data-baseweb="select"] * {background:#FFFFFF !important;}
+.stApp [data-testid="stCaptionContainer"] {opacity:1 !important;}
+.stApp [data-testid="stCaptionContainer"] p {color:#34545C !important; opacity:1 !important;}
+.stApp [data-testid="stColumn"] [data-testid="stVerticalBlock"]:not(:has([data-testid="stVerticalBlock"])) {border:1px solid #CFE4E7 !important; border-radius:16px !important;
+    background:#FFFFFF !important; box-shadow:0 4px 16px rgba(15,111,124,.08); transition:box-shadow .2s ease, border-color .2s ease;}
+.stApp [data-testid="stColumn"] [data-testid="stVerticalBlock"]:not(:has([data-testid="stVerticalBlock"])):hover {box-shadow:0 10px 26px rgba(15,111,124,.16); border-color:#9FD0D4 !important;}
+
+/* ---- Gaya mengikuti desain Figma (tampilan saja) ---- */
+.stApp {background: radial-gradient(circle at 6% 28%, rgba(140,195,208,.60) 0, transparent 34%),
+        radial-gradient(circle at 94% 22%, rgba(110,200,200,.50) 0, transparent 36%),
+        radial-gradient(circle at 12% 88%, rgba(140,195,215,.50) 0, transparent 34%),
+        linear-gradient(180deg,#CDE3E9 0%,#DBEDEF 100%) !important;}
+.block-container {max-width: 1100px !important;}
+.stApp .hero h1 {text-transform:uppercase; letter-spacing:.5px; font-weight:800 !important; font-size:2.1rem !important;}
+.stApp .lencana, .stApp .lencana.utama {background:linear-gradient(135deg,#0F6F7C,#1CA3A3) !important; color:#FFFFFF !important;
+    box-shadow:0 4px 10px rgba(15,111,124,.30); border-radius:10px;}
+.stApp .judul-bagian {margin:.2rem 0 .7rem !important;}
+/* kartu S, O, A, P */
+.stApp .st-key-kartu_s, .stApp .st-key-kartu_o, .stApp .st-key-kartu_a, .stApp .st-key-kartu_p {
+    background:#FFFFFF !important; border:1px solid #E1EEF1 !important; border-radius:18px !important;
+    padding:1.1rem 1.3rem 1.2rem !important; box-shadow:0 10px 28px rgba(15,70,90,.10) !important;}
+.stApp .st-key-kartu_s:hover, .stApp .st-key-kartu_o:hover, .stApp .st-key-kartu_a:hover, .stApp .st-key-kartu_p:hover {
+    box-shadow:0 14px 32px rgba(15,70,90,.16) !important; border-color:#E1EEF1 !important;}
+/* kotak teks dan dropdown */
+.stApp [data-testid="stTextAreaRootElement"], .stApp [data-testid="stTextAreaRootElement"] * {background:#E8F1F5 !important;}
+.stApp [data-testid="stTextAreaRootElement"] {border:1.5px solid #B7D0D9 !important; border-radius:10px !important;}
+.stApp div[data-baseweb="select"] *  {background:#D9E9EE !important;}
+.stApp div[data-baseweb="select"] > div {border:1.5px solid #6FAAB8 !important; border-radius:8px !important;}
+/* tombol utama oranye-merah, kecil, rata kiri */
+.stApp button[kind="primary"] {background:linear-gradient(180deg,#DD5520,#BC3A0A) !important; border:none !important;
+    border-radius:8px !important; font-size:.85rem !important; padding:.35rem 1.3rem !important;
+    box-shadow:0 6px 14px rgba(188,58,10,.35) !important;}
+.stApp button[kind="primary"]:hover {transform:translateY(-1px); box-shadow:0 9px 18px rgba(188,58,10,.45) !important;}
+/* notifikasi */
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentSuccess"]) {background:#C9ECD8 !important; border-color:#A8DDBE !important;}
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentWarning"]) {background:#FDE8A6 !important; border-color:#F3D27A !important;}
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentInfo"]) {background:#C9DDF7 !important; border-color:#9DBFEA !important;}
+.stApp [data-testid="stAlertContainer"]:has([data-testid="stAlertContentError"]) {background:#FBD3D3 !important; border-color:#F0AAAA !important;}
+/* kartu hasil: judul besar tanpa garis bawah */
+.stApp div[data-testid="stColumn"] h3 {border-bottom:none !important; color:#0B3D44 !important; font-size:1.45rem !important; font-weight:600 !important;}
+.stApp [data-testid="stColumn"] [data-testid="stVerticalBlock"]:not(:has([data-testid="stVerticalBlock"])) {border-color:#E1EEF1 !important;
+    box-shadow:0 8px 22px rgba(15,70,90,.10) !important;}
+/* dropdown: kotak akar + isi */
+.stApp [data-testid="stSelectbox"] [data-baseweb="select"], .stApp [data-testid="stSelectbox"] [data-baseweb="select"] * {background:#D9E9EE !important; border-color:#6FAAB8 !important;}
+.stApp [data-testid="stSelectbox"] [data-baseweb="select"] {border:1.5px solid #6FAAB8 !important; border-radius:8px !important; overflow:hidden;}
+.stApp [data-testid="stSelectbox"] [data-baseweb="select"] > div {border:none !important;}
+.stApp [data-testid="stSelectbox"] svg {fill:#0F6F7C !important; color:#0F6F7C !important;}
+.stApp [data-testid="stSelectbox"] div[role="group"] {background:#D9E9EE !important; border:1.5px solid #6FAAB8 !important; border-radius:8px !important;}
+.stApp [data-testid="stSelectbox"] div[role="group"] * {background:transparent !important;}
+.stApp [data-testid="stSelectbox"] input {color:#12313A !important; -webkit-text-fill-color:#12313A !important;}
+.stApp [data-testid="stSelectbox"] button, .stApp [data-testid="stSelectbox"] [data-testid="stSelectboxVirtualDropdown"] {color:#0F6F7C !important;}
+.stApp [data-testid="stTextInput"] [data-baseweb="input"], .stApp [data-testid="stTextInput"] div[role="group"] {background:#E8F1F5 !important; border:1.5px solid #B7D0D9 !important; border-radius:8px !important;}
+.stApp [data-testid="stTextInput"] [data-baseweb="input"] *, .stApp [data-testid="stTextInput"] div[role="group"] * {background:transparent !important;}
+/* kotak sumber data */
+.stApp [data-testid="stCode"], .stApp [data-testid="stCode"] pre, .stApp [data-testid="stCode"] code {background:#D7E8EC !important;
+    color:#1B3A44 !important; border-radius:10px;}
+.stApp [data-testid="stCode"] {border:1px solid #BCD6DC;}
 </style>
 """, unsafe_allow_html=True)
+
+
+def kartu(kunci):
+    """Kotak putih berbingkai (tampilan saja). Pakai key bila versi Streamlit mendukung."""
+    try:
+        return st.container(border=True, key=kunci)
+    except TypeError:
+        return st.container(border=True)
 
 
 def bagian(huruf, nama, utama=False):
@@ -79,29 +222,36 @@ def judul(kode):
 
 
 # ---------------------------------------------------------------
-st.title("🩺 Clinical Co-Pilot")
-st.caption("Pendukung keputusan klinis berbasis PNPK  |  "
-           "🟠 MODE DEMO: bukan pasien sungguhan")
+st.markdown("""
+<div class="hero">
+  <div class="logo">✚</div>
+  <div>
+    <h1>Clinical Co-Pilot</h1>
+    <p>Pendukung keputusan klinis berbasis PNPK</p>
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
 # ---------------------------------------------------------------
 # S - Subjektif, O - Objektif (teks bebas, tidak dianalisis)
 # ---------------------------------------------------------------
 kiri, kanan = st.columns(2)
-with kiri:
+with kiri, kartu("kartu_s"):
     bagian("S", "Subjektif")
-    teks_s = st.text_area("Keluhan pasien", height=130, label_visibility="collapsed",
+    teks_s = st.text_area("Keluhan pasien", height=130, label_visibility="collapsed", key="teks_s",
                  placeholder="Keluhan utama, riwayat penyakit... (teks bebas)")
-with kanan:
+with kanan, kartu("kartu_o"):
     bagian("O", "Objektif")
-    teks_o = st.text_area("Pemeriksaan", height=130, label_visibility="collapsed",
+    teks_o = st.text_area("Pemeriksaan", height=130, label_visibility="collapsed", key="teks_o",
                  placeholder="Tanda vital, pemeriksaan fisik, hasil lab... (teks bebas)")
-st.caption("Saran Co-Pilot hanya dari kode ICD-10. Teks S, O, dan P hanya dibaca untuk peringatan keamanan obat.")
+st.caption("Saran Co-Pilot ditentukan oleh kode ICD-10. Teks S, O, dan P dibaca untuk tanda centang (sudah dilakukan), peringatan keamanan obat, dan aturan klinis.")
 
 # ---------------------------------------------------------------
 # A - Asesmen: pilih kode ICD-10
 # ---------------------------------------------------------------
-bagian("A", "Asesmen", utama=True)
-pilih = st.selectbox("Diagnosis utama (ICD-10)", list(PILIHAN))
+with kartu("kartu_a"):
+    bagian("A", "Asesmen", utama=True)
+    pilih = st.selectbox("Diagnosis utama (ICD-10)", list(PILIHAN))
 tekan = st.button("Minta saran Co-Pilot", type="primary")
 
 if tekan and PILIHAN[pilih] not in ADA_DATA:
@@ -129,7 +279,27 @@ if st.session_state.get("kosong"):
 # ---------------------------------------------------------------
 if hasil:
     data, icd = hasil["data"], hasil["icd"]
+    # masukan dr. Jovian: TD 220/120 atau kurang pada I63 -> saran antihipertensi tidak ditampilkan
+    data = cdss_ai.sembunyikan_antihipertensi(
+        icd, data, st.session_state.get("teks_s", ""), st.session_state.get("teks_o", ""))
     st.subheader(f"Co-Pilot: {icd} - {hasil['diagnosis']}")
+
+    # Teks P dibaca dari session_state karena kotak Planning digambar di bawah kartu
+    teks_p_kini = st.session_state.get("teks_p", "")
+    sudah = cdss_ai.tandai_sudah(data, teks_s, teks_o, teks_p_kini)   # untuk centang
+    aturan = cdss_ai.aturan_klinis(icd, teks_s, teks_o, teks_p_kini)  # aturan dr. Jovian
+
+    def centang(relasi, nama, kata):
+        """Tanda centang bila sudah tercatat dokter di S/O/P."""
+        return f"✅ **{nama}**  _({kata})_" if (relasi, nama) in sudah else f"**{nama}**"
+
+    def asal(r):
+        """Teks sumber: halaman PNPK, atau 'praktik klinis tervalidasi' bila bukan dari PNPK."""
+        return "praktik klinis tervalidasi" if str(r.halaman).strip() in ("-", "") else f"hal {r.halaman}"
+
+    for a_ in aturan:
+        pesan = f"**{a_['judul']}**: {a_['isi']}"
+        {"MERAH": st.error, "KUNING": st.warning, "BIRU": st.info}[a_["tingkat"]](pesan)
 
     if icd.startswith("I6"):
         st.warning("Terapi stroke berbeda untuk tiap jenis (I60 perdarahan subaraknoid, "
@@ -144,13 +314,16 @@ if hasil:
 
     with k1.container(border=True):
         st.markdown("### Diagnosa banding")
-        baris = data[data["relasi"] == "DIAGNOSIS_BANDING"]
+        baris, catatan_ddx = cdss_ai.filter_diagnosis_banding(
+            icd, data[data["relasi"] == "DIAGNOSIS_BANDING"], teks_s, teks_o)
         if baris.empty:
             st.info("Belum ada data diagnosis banding di PNPK yang sudah dimasukkan.")
         for r in baris.itertuples():
             kode = f'<span class="kode">{r.target_kode}</span>' if r.target_kode else ""
             st.markdown(f"{kode}**{r.target_nama}**", unsafe_allow_html=True)
-            st.caption(f"{r.detail}  (hal {r.halaman})")
+            st.caption(f"{r.detail}  ({asal(r)})")
+        for c_ in catatan_ddx:
+            st.caption(f"ℹ️ {c_}")
 
     with k2.container(border=True):
         st.markdown("### Saran pemeriksaan penunjang")
@@ -158,8 +331,8 @@ if hasil:
         if baris.empty:
             st.info("Belum ada data pemeriksaan.")
         for r in baris.itertuples():
-            st.markdown(f"**{r.target_nama}**")
-            st.caption(f"{r.detail}  (hal {r.halaman})")
+            st.markdown(centang(r.relasi, r.target_nama, "sudah ada di S/O"))
+            st.caption(f"{r.detail}  ({asal(r)})")
 
     with k3.container(border=True):
         st.markdown("### Saran tatalaksana")
@@ -169,8 +342,8 @@ if hasil:
         for jenis, grup in terapi.groupby("relasi", sort=False):
             st.markdown(f"_{judul(jenis)}_")
             for r in grup.itertuples():
-                st.markdown(f"**{r.target_nama}**")
-                st.caption(f"{r.detail}  (hal {r.halaman})")
+                st.markdown(centang(r.relasi, r.target_nama, "sudah tercatat di Planning"))
+                st.caption(f"{r.detail}  ({asal(r)})")
 
     # Ringkasan AI: dihitung sekali, setelah kartu tampil
     with kotak_ai:
@@ -197,9 +370,10 @@ if hasil:
 # ---------------------------------------------------------------
 # P - Planning (teks bebas + cek interaksi obat otomatis)
 # ---------------------------------------------------------------
-bagian("P", "Planning")
-rencana = st.text_area("Rencana", height=110, label_visibility="collapsed",
-                       placeholder="Rencana terapi, edukasi, tindak lanjut... (teks bebas)")
+with kartu("kartu_p"):
+    bagian("P", "Planning")
+    rencana = st.text_area("Rencana", height=110, label_visibility="collapsed", key="teks_p",
+                           placeholder="Rencana terapi, edukasi, tindak lanjut... (teks bebas)")
 
 
 # Peringatan keamanan dari teks S + O + P (aturan CSV, tanpa LLM)
@@ -265,4 +439,6 @@ if st.session_state.jejak:
 
 st.divider()
 st.caption("Saran sistem ini bersifat pendukung dan bukan pengganti penilaian dokter. "
-           "Keputusan klinis akhir sepenuhnya ada pada dokter.")
+           "Keputusan klinis akhir sepenuhnya ada pada dokter.  \n"
+           "Data klinis dan aturan dalam aplikasi ini telah divalidasi oleh dr. Jovian.  \n"
+           "Mode demo: bukan pasien sungguhan.")

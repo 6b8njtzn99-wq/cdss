@@ -2,18 +2,21 @@
 uji_skenario.py - Menjalankan semua skenario di skenario_uji.csv ke cdss_ai.py.
 Tanpa Gemini (cepat dan tidak tergantung layanan luar).
 
-Tiap skenario dicek 4 hal:
+Tiap skenario dicek 6 hal:
   1. Isi Co-Pilot untuk kode ICD: semua nama di kolom harus_ada HARUS muncul,
      semua nama di kolom harus_tidak_ada TIDAK BOLEH muncul.
   2. Peringatan keamanan dari teks S + O + P sama dengan yang diharapkan.
   3. Semua baris data kode itu punya sumber dan halaman (data lineage).
   4. Perbandingan obat di Planning dengan PNPK (kolom terapi_diharapkan;
      kosong = tidak dicek, KOSONG = tidak boleh ada obat terbaca).
+  5. Aturan klinis dr. Jovian yang muncul (kolom aturan_diharapkan; TIDAK_ADA = tidak boleh ada).
+  6. Tanda centang pemeriksaan/tatalaksana (kolom centang_diharapkan).
 
 Jalankan:  python uji_skenario.py
 Hasil lengkap disimpan di hasil_uji.csv
 """
 import csv
+import pandas as pd
 import cdss_ai
 
 # ---- LANGKAH 1: baca skenario
@@ -31,6 +34,12 @@ for s in skenario:
         nama_ada, baris = set(), []
     else:
         baris = r["data_klinis"]
+        # diagnosa banding disaring seperti di aplikasi (E10 / DM gestasional, masukan dr. Jovian)
+        df = pd.DataFrame(baris)
+        ddx, _ = cdss_ai.filter_diagnosis_banding(
+            s["kode_icd"], df[df["relasi"] == "DIAGNOSIS_BANDING"], s["subjektif"], s["objektif"])
+        df = pd.concat([df[df["relasi"] != "DIAGNOSIS_BANDING"], ddx])
+        baris = df.to_dict(orient="records")
         nama_ada = {b["target_nama"] for b in baris}
 
     for nama in filter(None, s["harus_ada"].split(";")):
@@ -56,7 +65,7 @@ for s in skenario:
         if kunci not in muncul_kecil:
             masalah.append(f"peringatan {diharapkan} tidak muncul (yang muncul: {sorted(muncul)})")
 
-    # ---- LANGKAH 4: cek data lineage
+    # ---- LANGKAH 4: cek data lineage (halaman "-" = rekomendasi dr. Jovian, bukan halaman PNPK)
     kosong = [b["target_nama"] for b in baris if not str(b["halaman"]).strip()]
     if kosong:
         masalah.append(f"tanpa halaman: {kosong[:3]}")
@@ -69,11 +78,24 @@ for s in skenario:
         if muncul_t != harapan_t:
             masalah.append(f"terapi diharapkan {sorted(harapan_t)}, muncul {sorted(muncul_t)}")
 
+    # ---- LANGKAH 6: cek aturan klinis dan tanda centang
+    if s["aturan_diharapkan"]:
+        muncul_a = {a["kode"] for a in cdss_ai.aturan_klinis(s["kode_icd"], s["subjektif"], s["objektif"], s["planning"])}
+        harapan_a = set() if s["aturan_diharapkan"] == "TIDAK_ADA" else set(s["aturan_diharapkan"].split(";"))
+        if muncul_a != harapan_a:
+            masalah.append(f"aturan diharapkan {sorted(harapan_a)}, muncul {sorted(muncul_a)}")
+    if s["centang_diharapkan"]:
+        sudah = {n for _, n in cdss_ai.tandai_sudah(cdss_ai.cari_diagnosis(s["kode_icd"]),
+                                                   s["subjektif"], s["objektif"], s["planning"])}
+        kurang = [n for n in s["centang_diharapkan"].split(";") if n not in sudah]
+        if kurang:
+            masalah.append(f"seharusnya bertanda centang tapi tidak: {kurang}")
+
     hasil.append({"id": s["id"], "kode_icd": s["kode_icd"],
                   "status": "LULUS" if not masalah else "GAGAL",
                   "alasan": " | ".join(masalah)})
 
-# ---- LANGKAH 6: tampilkan ringkasan dan simpan
+# ---- LANGKAH 7: tampilkan ringkasan dan simpan
 for h in hasil:
     print(h["id"], h["kode_icd"], h["status"], h["alasan"])
 lulus = sum(h["status"] == "LULUS" for h in hasil)
