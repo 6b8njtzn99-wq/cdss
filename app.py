@@ -225,6 +225,9 @@ if hasil:
                 rujukan = "; ".join(f"{x['target_nama']} ({x['relasi'].replace('_', ' ').lower()}, hal {x['halaman']})"
                                     for x in b["baris"])
                 st.success(f"**{b['obat'].capitalize()}**: tercantum di PNPK, {rujukan}")
+            elif b["status"] == "TIDAK_DIANJURKAN_PNPK":
+                rujukan = "; ".join(f"{x['target_nama']}, hal {x['halaman']}: {x['detail']}" for x in b["baris"])
+                st.warning(f"**{b['obat'].capitalize()}**: PNPK tidak menganjurkan. {rujukan}")
             else:
                 st.info(f"**{b['obat'].capitalize()}**: tidak tercantum di data PNPK kami untuk diagnosis ini. "
                         "Belum tentu salah, mohon dicek dokter.")

@@ -234,6 +234,9 @@ PEMETAAN_OBAT = {
     "liraglutid": "glp-1", "semaglutid": "glp-1", "dulaglutid": "glp-1",
     "fenofibrate": "fibrat", "amlodipine": "ace inhibitor",
     "nimodipine": "nimodipin", "edoxaban": "doac", "ticagrelor": "ticagrelor",
+    "asam traneksamat": "antifibrinolitik", "traneksamat": "antifibrinolitik",
+    "nicardipine": "antihipertensi iv", "nikardipin": "antihipertensi iv",
+    "labetalol": "antihipertensi iv", "esmolol": "antihipertensi iv", "diltiazem": "antihipertensi iv",
     # Stroke (PNPK Stroke)
     "alteplase": "alteplase", "tenecteplase": "tenecteplase",
     "aspirin": "aspirin", "clopidogrel": "clopidogrel", "ticagrelor": "ticagrelor",
@@ -244,11 +247,14 @@ PEMETAAN_OBAT = {
 
 def bandingkan_terapi(icd, teks_planning):
     """Bandingkan obat yang ditulis dokter di Planning dengan terapi PNPK untuk ICD tsb.
-    Return list: {obat, status, baris} dengan status SESUAI_PNPK atau TIDAK_ADA_DI_DATA.
+    Return list: {obat, status, baris}; status: SESUAI_PNPK, TIDAK_DIANJURKAN_PNPK
+    (PNPK menyebut tidak dianjurkan) atau TIDAK_ADA_DI_DATA.
     Hanya perbandingan nama obat. Dosis & kecocokan klinis tetap dinilai dokter."""
     teks = teks_planning.lower()
     semua = {o.lower() for o in list(PEMETAAN_OBAT) + OBAT_DIKENAL}  # huruf kecil, tanpa duplikat
     obat_terbaca = sorted(o for o in semua if ada_kata(teks, o))
+    # buang nama pendek yang hanya potongan nama lebih panjang (traneksamat di asam traneksamat)
+    obat_terbaca = [o for o in obat_terbaca if not any(o != p and o in p for p in obat_terbaca)]
     data = cari_diagnosis(icd)
     terapi = data[data["relasi"].str.startswith("TERAPI")]
     hasil = []
@@ -263,8 +269,11 @@ def bandingkan_terapi(icd, teks_planning):
         if cocok.empty:
             hasil.append({"obat": obat, "status": "TIDAK_ADA_DI_DATA", "baris": []})
         else:
-            hasil.append({"obat": obat, "status": "SESUAI_PNPK",
-                          "baris": cocok[["relasi", "target_nama", "halaman", "sumber"]]
+            # baris yang di PNPK justru "tidak dianjurkan" (mis. antifibrinolitik pada PSA)
+            tidak = cocok["detail"].str.lower().str.startswith("tidak dianjurkan").any()
+            hasil.append({"obat": obat,
+                          "status": "TIDAK_DIANJURKAN_PNPK" if tidak else "SESUAI_PNPK",
+                          "baris": cocok[["relasi", "target_nama", "detail", "halaman", "sumber"]]
                                    .to_dict(orient="records")})
     return hasil
 
