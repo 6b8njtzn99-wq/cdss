@@ -2,11 +2,13 @@
 uji_skenario.py - Menjalankan semua skenario di skenario_uji.csv ke cdss_ai.py.
 Tanpa Gemini (cepat dan tidak tergantung layanan luar).
 
-Tiap skenario dicek 3 hal:
+Tiap skenario dicek 4 hal:
   1. Isi Co-Pilot untuk kode ICD: semua nama di kolom harus_ada HARUS muncul,
      semua nama di kolom harus_tidak_ada TIDAK BOLEH muncul.
   2. Peringatan keamanan dari teks S + O + P sama dengan yang diharapkan.
   3. Semua baris data kode itu punya sumber dan halaman (data lineage).
+  4. Perbandingan obat di Planning dengan PNPK (kolom terapi_diharapkan;
+     kosong = tidak dicek, KOSONG = tidak boleh ada obat terbaca).
 
 Jalankan:  python uji_skenario.py
 Hasil lengkap disimpan di hasil_uji.csv
@@ -59,11 +61,19 @@ for s in skenario:
     if kosong:
         masalah.append(f"tanpa halaman: {kosong[:3]}")
 
+    # ---- LANGKAH 5: cek perbandingan terapi Planning vs PNPK
+    if s["terapi_diharapkan"]:
+        banding = cdss_ai.bandingkan_terapi(s["kode_icd"], s["planning"])
+        muncul_t = {f'{b["obat"]}={b["status"]}' for b in banding}
+        harapan_t = set() if s["terapi_diharapkan"] == "KOSONG" else set(s["terapi_diharapkan"].split(";"))
+        if muncul_t != harapan_t:
+            masalah.append(f"terapi diharapkan {sorted(harapan_t)}, muncul {sorted(muncul_t)}")
+
     hasil.append({"id": s["id"], "kode_icd": s["kode_icd"],
                   "status": "LULUS" if not masalah else "GAGAL",
                   "alasan": " | ".join(masalah)})
 
-# ---- LANGKAH 5: tampilkan ringkasan dan simpan
+# ---- LANGKAH 6: tampilkan ringkasan dan simpan
 for h in hasil:
     print(h["id"], h["kode_icd"], h["status"], h["alasan"])
 lulus = sum(h["status"] == "LULUS" for h in hasil)

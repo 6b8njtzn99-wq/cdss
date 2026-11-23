@@ -201,6 +201,74 @@ def peringatan_dari_teks(teks):
     return obat, kondisi, (cek_keamanan(obat, kondisi) if obat else [])
 
 
+
+# ---------------------------------------------------------------
+# LANGKAH 4b: Bandingkan obat di Planning dokter dengan terapi di PNPK
+# (aturan sederhana: nama obat -> golongan -> cari di baris TERAPI_* untuk ICD terpilih)
+# ---------------------------------------------------------------
+# kiri: nama obat yang mungkin diketik dokter | kanan: potongan nama target di CSV
+PEMETAAN_OBAT = {
+    # DM tipe 2 (PNPK DM2)
+    "metformin": "metformin",
+    "glimepirid": "sulfonilurea", "gliklazid": "sulfonilurea",
+    "glibenklamid": "sulfonilurea", "glipizid": "sulfonilurea",
+    "repaglinid": "glinid", "nateglinid": "glinid",
+    "pioglitazon": "tiazolidinedion",
+    "akarbose": "alfa glukosidase", "voglibosa": "alfa glukosidase",
+    "vildagliptin": "dpp-4", "linagliptin": "dpp-4", "sitagliptin": "dpp-4",
+    "saxagliptin": "dpp-4", "alogliptin": "dpp-4",
+    "empagliflozin": "sglt-2", "dapagliflozin": "sglt-2",
+    "canagliflozin": "sglt-2", "ipragliflozin": "sglt-2",
+    "liraglutide": "glp-1", "semaglutide": "glp-1", "dulaglutide": "glp-1",
+    "insulin": "insulin",
+    "simvastatin": "statin", "atorvastatin": "statin", "rosuvastatin": "statin",
+    "fenofibrat": "fibrat",
+    "captopril": "ace inhibitor", "ramipril": "ace inhibitor", "lisinopril": "ace inhibitor",
+    "candesartan": "ace inhibitor", "valsartan": "ace inhibitor", "telmisartan": "ace inhibitor",
+    "amlodipin": "ace inhibitor", "bisoprolol": "ace inhibitor",
+    # Variasi ejaan yang sering dipakai dokter (ejaan Inggris dll)
+    "glimepiride": "sulfonilurea", "gliclazide": "sulfonilurea", "glibenclamide": "sulfonilurea",
+    "glipizide": "sulfonilurea", "glyburide": "sulfonilurea",
+    "repaglinide": "glinid", "nateglinide": "glinid",
+    "pioglitazone": "tiazolidinedion", "acarbose": "alfa glukosidase", "voglibose": "alfa glukosidase",
+    "liraglutid": "glp-1", "semaglutid": "glp-1", "dulaglutid": "glp-1",
+    "fenofibrate": "fibrat", "amlodipine": "ace inhibitor",
+    "nimodipine": "nimodipin", "edoxaban": "doac", "ticagrelor": "ticagrelor",
+    # Stroke (PNPK Stroke)
+    "alteplase": "alteplase", "tenecteplase": "tenecteplase",
+    "aspirin": "aspirin", "clopidogrel": "clopidogrel", "ticagrelor": "ticagrelor",
+    "cilostazol": "cilostazol", "nimodipin": "nimodipin", "warfarin": "warfarin",
+    "dabigatran": "doac", "rivaroxaban": "doac", "apixaban": "doac", "edoksaban": "doac",
+}
+
+
+def bandingkan_terapi(icd, teks_planning):
+    """Bandingkan obat yang ditulis dokter di Planning dengan terapi PNPK untuk ICD tsb.
+    Return list: {obat, status, baris} dengan status SESUAI_PNPK atau TIDAK_ADA_DI_DATA.
+    Hanya perbandingan nama obat. Dosis & kecocokan klinis tetap dinilai dokter."""
+    teks = teks_planning.lower()
+    semua = {o.lower() for o in list(PEMETAAN_OBAT) + OBAT_DIKENAL}  # huruf kecil, tanpa duplikat
+    obat_terbaca = sorted(o for o in semua if ada_kata(teks, o))
+    data = cari_diagnosis(icd)
+    terapi = data[data["relasi"].str.startswith("TERAPI")]
+    hasil = []
+    for obat in obat_terbaca:
+        kunci = PEMETAAN_OBAT.get(obat.lower())
+        cocok = pd.DataFrame()
+        if kunci:
+            nama = terapi["target_nama"].str.lower()
+            cocok = terapi[nama == kunci]                    # nama persis dulu
+            if cocok.empty:
+                cocok = terapi[nama.str.contains(kunci, regex=False)]
+        if cocok.empty:
+            hasil.append({"obat": obat, "status": "TIDAK_ADA_DI_DATA", "baris": []})
+        else:
+            hasil.append({"obat": obat, "status": "SESUAI_PNPK",
+                          "baris": cocok[["relasi", "target_nama", "halaman", "sumber"]]
+                                   .to_dict(orient="records")})
+    return hasil
+
+
 # ---------------------------------------------------------------
 # LANGKAH 5: Gabungkan semuanya
 # ---------------------------------------------------------------

@@ -215,6 +215,21 @@ if obat_ada:
                f"{p['isi']}  \n_Sumber: {p['sumber']}_")
         (st.error if p["tingkat"] in ("TINGGI", "TIDAK_DIREKOMENDASIKAN") else st.warning)(isi)
 
+# Bandingkan obat di Planning dengan terapi PNPK untuk ICD yang dipilih
+if hasil:
+    banding = cdss_ai.bandingkan_terapi(hasil["icd"], rencana)
+    if banding:
+        st.markdown("**💊 Perbandingan terapi di Planning dengan PNPK**")
+        for b in banding:
+            if b["status"] == "SESUAI_PNPK":
+                rujukan = "; ".join(f"{x['target_nama']} ({x['relasi'].replace('_', ' ').lower()}, hal {x['halaman']})"
+                                    for x in b["baris"])
+                st.success(f"**{b['obat'].capitalize()}**: tercantum di PNPK, {rujukan}")
+            else:
+                st.info(f"**{b['obat'].capitalize()}**: tidak tercantum di data PNPK kami untuk diagnosis ini. "
+                        "Belum tentu salah, mohon dicek dokter.")
+        st.caption("Hanya mencocokkan nama obat. Dosis dan kecocokan dengan kondisi pasien tetap penilaian dokter.")
+
 # Keputusan dokter (Human-in-the-Loop)
 if hasil:
     st.divider()
