@@ -4,3 +4,6 @@ __pycache__/
 chroma_db/
 hasil_evaluasi.csv
 *.zip
+.venv/
+data/ppk/*.pdf
+data/ddinter/
