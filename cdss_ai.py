@@ -166,6 +166,42 @@ PERINGATAN KEAMANAN OBAT (dari aturan, bukan dari kamu):
 
 
 # ---------------------------------------------------------------
+# LANGKAH 4: Baca teks bebas dokter -> cari obat & kondisi -> cek keamanan
+# (kata kunci saja; keputusan peringatan tetap dari aturan CSV, bukan AI)
+# ---------------------------------------------------------------
+_semua_obat = set(KONTRA["obat"]) | set(INTERAKSI["obat_a"]) | set(INTERAKSI["obat_b"])
+OBAT_DIKENAL = sorted((o for o in _semua_obat if o), key=len, reverse=True)
+KATA_KONDISI = {          # kondisi di CSV : kata yang mungkin diketik dokter
+    "hamil": ["hamil", "kehamilan"],
+    "gagal jantung": ["gagal jantung"],
+    "asma": ["asma"],
+    "bradikardi": ["bradikardi", "bradikardia"],
+    "hiperkalemia": ["hiperkalemia"],
+    "fibrilasi atrium": ["fibrilasi atrium"],
+    "penyakit ginjal kronik": ["penyakit ginjal kronik", "pgk"],
+    "gangguan hati": ["gangguan hati", "sirosis"],
+    "perdarahan intraserebral": ["perdarahan intraserebral", "ich"],
+}
+
+
+def ada_kata(teks, kata):
+    """True bila kata ada di teks dan TIDAK didahului tidak/bukan/tanpa (negasi sederhana)."""
+    for m in re.finditer(r"\b" + re.escape(kata) + r"\b", teks):
+        sebelum = teks[max(0, m.start() - 20):m.start()]
+        if not re.search(r"\b(tidak|bukan|tanpa|disangkal)\b", sebelum):
+            return True
+    return False
+
+
+def peringatan_dari_teks(teks):
+    """Return (obat_terbaca, kondisi_terbaca, daftar_peringatan)."""
+    teks = teks.lower()
+    obat = sorted({o for o in OBAT_DIKENAL if ada_kata(teks, o.lower())})
+    kondisi = [k for k, kata in KATA_KONDISI.items() if any(ada_kata(teks, w) for w in kata)]
+    return obat, kondisi, (cek_keamanan(obat, kondisi) if obat else [])
+
+
+# ---------------------------------------------------------------
 # LANGKAH 5: Gabungkan semuanya
 # ---------------------------------------------------------------
 def analisis(diagnosis, daftar_obat=(), kondisi_pasien=(), pakai_llm=True):

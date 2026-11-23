@@ -11,7 +11,6 @@ Alur layar:
 
 Jalankan:  python -m streamlit run app.py
 """
-import re
 import time
 import streamlit as st
 import cdss_ai  # modul AI dan data CSV
@@ -49,39 +48,13 @@ ref = cdss_ai.RELASI[["icd", "diagnosis"]].drop_duplicates()
 ADA_DATA = set(ref["icd"])
 PILIHAN = {f"{r.icd} - {r.diagnosis}": r.icd for r in ref.itertuples()}
 
-# Sesuai dr. Jovian: hanya kode utama. I64 (belum ditentukan) tidak ditampilkan.
-PILIHAN = {k: v for k, v in PILIHAN.items() if v != "I64"}
+# Kode utama menurut dr. Jovian: I60, I61, I63, I69 (stroke), E11. Kode tambahan di bawah
+# atas permintaan kelompok dan BELUM divalidasi dokter, jadi diberi tanda.
+TAMBAHAN = {"I64", "I65", "I66", "I67", "I10"}
+PILIHAN = {(k + " [tambahan, belum divalidasi]" if v in TAMBAHAN and v != "I10" else k): v
+           for k, v in PILIHAN.items()}
 PILIHAN = dict(sorted(PILIHAN.items()))
 
-
-# ---------------------------------------------------------------
-# Peringatan keamanan dari teks bebas dokter (S, O, P).
-# Cara kerja: cari NAMA OBAT dan KATA KONDISI di teks (kata kunci),
-# lalu keputusan peringatan tetap dari aturan CSV, bukan dari AI.
-# ---------------------------------------------------------------
-semua_obat = set(cdss_ai.KONTRA["obat"])
-semua_obat |= set(cdss_ai.INTERAKSI["obat_a"]) | set(cdss_ai.INTERAKSI["obat_b"])
-OBAT_DIKENAL = sorted((o for o in semua_obat if o), key=len, reverse=True)
-KATA_KONDISI = {          # kondisi di CSV : kata yang mungkin diketik dokter
-    "hamil": ["hamil", "kehamilan"],
-    "gagal jantung": ["gagal jantung"],
-    "asma": ["asma"],
-    "bradikardi": ["bradikardi", "bradikardia"],
-    "hiperkalemia": ["hiperkalemia"],
-    "fibrilasi atrium": ["fibrilasi atrium"],
-    "penyakit ginjal kronik": ["penyakit ginjal kronik", "pgk"],
-    "gangguan hati": ["gangguan hati", "sirosis"],
-    "perdarahan intraserebral": ["perdarahan intraserebral", "ich"],
-}
-
-
-def ada_kata(teks, kata):
-    """True bila kata ada di teks dan TIDAK didahului 'tidak/bukan/tanpa' (negasi sederhana)."""
-    for m in re.finditer(r"\b" + re.escape(kata) + r"\b", teks):
-        sebelum = teks[max(0, m.start() - 20):m.start()]
-        if not re.search(r"\b(tidak|bukan|tanpa|disangkal)\b", sebelum):
-            return True
-    return False
 
 # Judul kelompok tatalaksana yang enak dibaca
 JUDUL = {
@@ -89,7 +62,9 @@ JUDUL = {
     "KRITERIA_TROMBOLISIS": "Kriteria trombolisis", "TROMBEKTOMI": "Trombektomi",
     "TERAPI_KHUSUS": "Kondisi khusus", "TERAPI_PSA": "Terapi perdarahan subaraknoid",
     "TERAPI_PERDARAHAN_INTRASEREBRAL": "Terapi perdarahan intraserebral",
-    "TERAPI_PENCEGAHAN": "Terapi pencegahan", "PENCEGAHAN_SEKUNDER": "Pencegahan sekunder",
+    "TERAPI_PENCEGAHAN": "Terapi pencegahan", "TERAPI_BEDAH": "Tindakan bedah dan revaskularisasi",
+    "REHABILITASI_FPKTP": "Rehabilitasi di FPKTP", "REHABILITASI_FASE_AKUT": "Rehabilitasi fase akut",
+    "REHABILITASI_SUBAKUT": "Rehabilitasi subakut", "PERSIAPAN_PULANG": "Persiapan pulang dan kembali bekerja", "PENCEGAHAN_SEKUNDER": "Pencegahan sekunder",
 }
 TIDAK_TERMASUK = {"DIAGNOSIS_BANDING", "PEMERIKSAAN", "KLASIFIKASI"}
 
@@ -228,11 +203,8 @@ rencana = st.text_area("Rencana", height=110, label_visibility="collapsed",
 
 
 # Peringatan keamanan dari teks S + O + P (aturan CSV, tanpa LLM)
-teks = f"{teks_s} {teks_o} {rencana}".lower()
-obat_ada = sorted({o for o in OBAT_DIKENAL if ada_kata(teks, o.lower())})
-kondisi_ada = [k for k, kata in KATA_KONDISI.items() if any(ada_kata(teks, w) for w in kata)]
+obat_ada, kondisi_ada, peringatan = cdss_ai.peringatan_dari_teks(f"{teks_s} {teks_o} {rencana}")
 if obat_ada:
-    peringatan = cdss_ai.cek_keamanan(obat_ada, kondisi_ada)
     st.markdown("**⚠️ Peringatan keamanan obat (dari teks yang dokter tulis)**")
     st.caption(f"Obat terbaca: {', '.join(obat_ada)}"
                + (f"  |  Kondisi terbaca: {', '.join(kondisi_ada)}" if kondisi_ada else ""))

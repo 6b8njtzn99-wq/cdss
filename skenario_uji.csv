@@ -1,0 +1,31 @@
+id,kode_icd,subjektif,objektif,planning,harus_ada,harus_tidak_ada,peringatan_diharapkan
+S01,I63,"Laki-laki 62 th, lemah separuh badan kanan dan bicara pelo sejak 2 jam. Riwayat hipertensi.","TD 170/100, GCS 15, NIHSS 8","CT-scan kepala segera, evaluasi trombolisis",Alteplase;Tenecteplase;CT-scan kepala tanpa kontras;Stroke perdarahan intraserebral,Nimodipin;Reversal antagonis vitamin K (warfarin),TIDAK_ADA
+S02,I63,"Perempuan 70 th ditemukan bangun tidur dengan lemah tangan kiri, onset tidak diketahui.","TD 160/90, GCS 14, NIHSS 7",CT perfusi bila tersedia,CT perfusi (CTP);Onset tidak diketahui (wake-up stroke),Nimodipin,TIDAK_ADA
+S03,I63,"Laki-laki 58 th, lumpuh mendadak sisi kiri, 5 jam lalu.","TD 175/95, NIHSS 14, dugaan oklusi pembuluh besar","CTA, rujuk pusat trombektomi",CT angiografi (CTA);Kriteria oklusi,Reversal DOAC,TIDAK_ADA
+S04,I63,"Laki-laki 66 th stroke iskemik 2 jam, sedang minum warfarin.","TD 165/95, NIHSS 9",Berikan alteplase. Pasien sedang minum warfarin.,Alteplase,Nimodipin,INTERAKSI:Alteplase+Warfarin
+S05,I61,"Perempuan 58 th, sakit kepala hebat mendadak, muntah, minum warfarin.","TD 210/115, GCS 11, INR 3,2","Koreksi INR, turunkan TD bertahap, konsul bedah saraf",Reversal antagonis vitamin K (warfarin);Pemeriksaan hemostasis,Alteplase;Tenecteplase;Aspirin;Nimodipin,TIDAK_ADA
+S06,I61,"Laki-laki 64 th, penurunan kesadaran, riwayat hipertensi tidak terkontrol.","TD 220/120, GCS 10","Antihipertensi IV, pantau TD tiap 5 menit",Antihipertensi IV kerja singkat;Target TD,Alteplase;Tenecteplase,TIDAK_ADA
+S07,I61,"Perempuan 72 th, nyeri kepala, muntah, mengantuk.","GCS 12, CT tampak hidrosefalus",Konsul bedah saraf untuk drainase,Bedah saraf,Nimodipin;Alteplase,TIDAK_ADA
+S08,I61,"Laki-laki 55 th, perdarahan intraserebral, tadi kejang.","GCS 11, glukosa darah 230","Antikejang, kontrol glukosa",Kejang;Glukosa,Alteplase,TIDAK_ADA
+S09,I60,"Perempuan 45 th, sakit kepala paling hebat seumur hidup, mendadak.","TD 160/95, GCS 14, kaku kuduk (+)","Konsul bedah saraf, pantau TD",Nimodipin;CT angiografi (CTA),Alteplase;Tenecteplase,TIDAK_ADA
+S10,I60,"Laki-laki 50 th, nyeri kepala hebat saat mengangkat beban.","GCS 15, kaku kuduk (+)",CTA cari aneurisma,CT angiografi (CTA);Stroke iskemik;Stroke perdarahan intraserebral,Reversal antagonis vitamin K (warfarin),TIDAK_ADA
+S11,I60,"Perempuan 52 th, SAH hari ke-2.","TD 150/90, GCS 14",Berikan nimodipin oral,Nimodipin,Alteplase,TIDAK_ADA
+S12,I60,"Laki-laki 48 th, nyeri kepala hebat mendadak.",GCS 15,CT-scan kepala tanpa kontras segera,CT-scan kepala tanpa kontras,Tenecteplase,TIDAK_ADA
+S13,I69,"Laki-laki 67 th, 3 bulan pasca stroke, sulit menelan makanan padat.",Skrining menelan abnormal,"Evaluasi menelan, terapis wicara",Skrining tes menelan;VFSS atau FEES,Alteplase;Nimodipin,TIDAK_ADA
+S14,I69,"Perempuan 60 th pasca stroke, tangan kanan kaku.",Spastisitas tangan kanan,"Terapi fisik, evaluasi spastisitas",Spastisitas dan kontraktur,Alteplase,TIDAK_ADA
+S15,I69,"Laki-laki 63 th pasca stroke, murung dan tidak bersemangat berbulan-bulan.",Skrining depresi positif,Rujuk psikiater,SSRI;Gangguan psikologis,Alteplase,TIDAK_ADA
+S16,I69,Laki-laki 70 th kontrol pasca stroke iskemik.,TD 138/84,Lanjutkan pencegahan sekunder,Aspirin;Statin intensif,Nimodipin;Alteplase,TIDAK_ADA
+S17,E11,"Perempuan 55 th, sering haus, sering kencing, berat badan turun.","Glukosa puasa 186, HbA1c 8,2%","Edukasi diet, mulai terapi oral",HbA1c;Glukosa plasma puasa;Metformin;Diabetes melitus tipe 1,Alteplase;Nimodipin,TIDAK_ADA
+S18,E11,"Perempuan 34 th, hiperglikemia ditemukan saat kehamilan trimester kedua.",Glukosa puasa 130,Rujuk obstetri,Diabetes melitus gestasional;Diabetes melitus tipe lain,Alteplase,TIDAK_ADA
+S19,E11,"Laki-laki 60 th, DM tipe 2 dan edema.",TD 150/90,Berikan akarbose dan furosemid,HbA1c,Alteplase,INTERAKSI:Akarbose+Furosemid
+S20,E11,"Perempuan 50 th, DM tipe 2 baru terdiagnosis.","HbA1c 7,9%","Berikan metformin, edukasi diet",Metformin,Nimodipin,TIDAK_ADA
+S21,I10,"Perempuan 30 th, sedang hamil 20 minggu, sakit kepala.",TD 160/100,"Berikan captopril, kontrol 1 minggu",Obstructive sleep apnea,Alteplase,KONTRAINDIKASI:Captopril
+S22,I10,"Perempuan 40 th, tidak hamil, sakit kepala ringan.",TD 155/95,Berikan captopril,Hidroklorothiazid,Alteplase,TIDAK_ADA
+S23,I10,"Laki-laki 68 th, hipertensi, hasil lab hiperkalemia.","TD 160/95, kalium 6,0",Berikan spironolakton,Penyakit parenkim ginjal,Alteplase,KONTRAINDIKASI:Spironolakton
+S24,I10,"Laki-laki 52 th, hipertensi, mengorok dan mengantuk siang hari.",TD 150/95,"Periksa EKG, evaluasi gaya hidup",Obstructive sleep apnea;Penyakit parenkim ginjal;EKG 12-lead;Hidroklorothiazid,Alteplase,TIDAK_ADA
+S25,I63,"Laki-laki 65 th, stroke iskemik 3 jam.","TD 170/100, NIHSS 10",Berikan alteplase dan rivaroksaban,Alteplase,Nimodipin,INTERAKSI:Alteplase+Rivaroksaban
+S26,I10,"Laki-laki 58 th, hipertensi dan dislipidemia.",TD 150/95,Berikan amlodipin dan simvastatin,Hidroklorothiazid,Alteplase,INTERAKSI:Amlodipin+Simvastatin
+S27,I10,"Laki-laki 45 th, hipertensi, riwayat asma.",TD 180/110,Berikan metoprolol IV,Hidroklorothiazid,Alteplase,KONTRAINDIKASI:Metoprolol IV
+S28,I61,"Perempuan 62 th, perdarahan intraserebral.",GCS 12,Observasi di ICU,Antihipertensi IV kerja singkat,Alteplase,TIDAK_ADA
+S29,I10,"Laki-laki 50 th, hipertensi, nyeri kepala.",TD 150/95,Berikan parasetamol,Hidroklorothiazid,Alteplase,TIDAK_ADA
+S30,I10,"Perempuan 28 th, hamil 16 minggu, hipertensi.",TD 150/95,Berikan losartan,Hidroklorothiazid,Alteplase,KONTRAINDIKASI:Losartan
